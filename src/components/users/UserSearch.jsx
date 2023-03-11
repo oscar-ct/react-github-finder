@@ -21,11 +21,9 @@ const UserSearch = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (text === "") {
-            window.alert("Please enter something");
             setAlert("Please enter something", "error")
         } else {
             fetchSearch(text);
-            ////
             setText("");
         }
     }
