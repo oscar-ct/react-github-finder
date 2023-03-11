@@ -1,4 +1,5 @@
 import {createContext, useState} from "react";
+import PropTypes from "prop-types";
 
 const GithubContext = createContext();
 
@@ -13,7 +14,7 @@ export const GithubProvider = ({ children }) => {
     const fetchUsers2 = () => {
         fetch(`${GITHUB_URL}/users`, {
             headers: {
-                Authorization: `token ${GITHUB_TOKEN}`
+                Authorization: `${GITHUB_TOKEN}`
             }
         }).then(async data => {
             setUsers(await data.json());
@@ -28,6 +29,10 @@ export const GithubProvider = ({ children }) => {
     }}>
         {children}
     </GithubContext.Provider>
+}
+
+GithubProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 }
 
 export default GithubContext;
