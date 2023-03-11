@@ -20,6 +20,12 @@ function githubReducer (state, action) {
                 users: [],
                 isLoading: false,
             }
+        case "GET_USER":
+            return {
+                ...state,
+                user: action.payload,
+                isLoading: false,
+            }
         default:
             return state;
 

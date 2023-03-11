@@ -13,7 +13,6 @@ const UserSearch = () => {
 
     const { setAlert } = useContext(AlertContext);
 
-
     const handleChange = (e) => {
         setText(e.target.value)
     }
