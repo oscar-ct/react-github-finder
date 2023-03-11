@@ -2,10 +2,17 @@
 
 function alertReducer(state, action) {
     switch (action.type) {
-        case "":
+        case "SET_ALERT":
             return {
                 ...state,
-                // todo
+                activeAlert: true,
+                message: action.payload,
+            }
+        case "REMOVE_ALERT":
+            return {
+                ...state,
+                activeAlert: false,
+                message: null,
             }
         default:
             return state;
