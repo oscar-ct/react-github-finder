@@ -1,6 +1,5 @@
 import { createContext, useReducer } from "react";
 import alertReducer from "./AlertReducer";
-import {func} from "prop-types";
 
 
 const AlertContext = createContext();

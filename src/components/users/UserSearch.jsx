@@ -21,6 +21,7 @@ const UserSearch = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (text === "") {
+            // using AlertContext here
             setAlert("Please enter something", "error")
         } else {
             fetchSearch(text);
