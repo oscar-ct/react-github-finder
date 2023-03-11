@@ -7,7 +7,7 @@ const UserSearch = () => {
     const [text, setText] = useState("");
 
     // This context data is for the clear btn
-    const { users } = useContext(GithubContext);
+    const { users, fetchSearch } = useContext(GithubContext);
 
 
     const handleChange = (e) => {
@@ -19,12 +19,14 @@ const UserSearch = () => {
         if (text === "") {
             window.alert("Please enter something");
         } else {
+            fetchSearch(text);
+            ////
             setText("");
         }
     }
 
     const usersExist = () => {
-        if (users.length === 0)
+        if (users.length > 0)
         return (
             <div>
                 <button className="btn btn-ghost btn-lg">

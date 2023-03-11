@@ -27,29 +27,47 @@ export const GithubProvider = ({ children }) => {
         });
     }
 
-    const fetchUsers = async () => {
+    // const fetchUsers = async () => {
+    //     setIsLoading();
+    //     const response = await fetch(`${GITHUB_URL}/users`, {
+    //         headers: {
+    //             Authorization: `${GITHUB_TOKEN}`
+    //         }
+    //     });
+    //     const data = await response.json();
+    //
+    //     // setUsers(data);
+    //     // setIsLoading(false);
+    //
+    //     // SETS users as PAYLOAD to githubReducer
+    //     dispatch({
+    //         type: "GET_USERS",
+    //         payload: data,
+    //     });
+    // }
+
+    const fetchSearch = async (text) => {
         setIsLoading();
-        const response = await fetch(`${GITHUB_URL}/users`, {
+        const params = new URLSearchParams({
+            q: text
+        });
+        const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
             headers: {
                 Authorization: `${GITHUB_TOKEN}`
             }
         });
-        const data = await response.json();
-
-        // setUsers(data);
-        // setIsLoading(false);
-
-        // SETS users as PAYLOAD to githubReducer
+        const {items} = await response.json();
         dispatch({
             type: "GET_USERS",
-            payload: data,
+            payload: items,
         });
+
     }
 
     return <GithubContext.Provider value={{
         users: state.users,
         isLoading: state.isLoading,
-        fetchUsers
+        fetchSearch,
     }}>
         {children}
     </GithubContext.Provider>
