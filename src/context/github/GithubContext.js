@@ -1,5 +1,6 @@
-import {createContext, useState} from "react";
+import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
+import githubReducer from "./GithubReducer"
 
 const GithubContext = createContext();
 
@@ -8,24 +9,47 @@ const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 
 export const GithubProvider = ({ children }) => {
 
-    const [users, setUsers] = useState([]);
-    const [isLoading, setIsLoading] = useState(true)
+    // const [users, setUsers] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true)
 
-    const fetchUsers2 = () => {
-        fetch(`${GITHUB_URL}/users`, {
+    const initialState = {
+        users: [],
+        isLoading: false,
+    }
+
+
+    const [state, dispatch] = useReducer(githubReducer, initialState);
+
+    // SETS isLoading to false from githubReducer
+    const setIsLoading = () => {
+        dispatch({
+            type: "SET_LOADING"
+        });
+    }
+
+    const fetchUsers = async () => {
+        setIsLoading();
+        const response = await fetch(`${GITHUB_URL}/users`, {
             headers: {
                 Authorization: `${GITHUB_TOKEN}`
             }
-        }).then(async data => {
-            setUsers(await data.json());
-            setIsLoading(false);
+        });
+        const data = await response.json();
+
+        // setUsers(data);
+        // setIsLoading(false);
+
+        // SETS users as PAYLOAD to githubReducer
+        dispatch({
+            type: "GET_USERS",
+            payload: data,
         });
     }
 
     return <GithubContext.Provider value={{
-        users,
-        isLoading,
-        fetchUsers2
+        users: state.users,
+        isLoading: state.isLoading,
+        fetchUsers
     }}>
         {children}
     </GithubContext.Provider>
