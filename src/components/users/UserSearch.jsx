@@ -2,12 +2,13 @@ import React from 'react';
 import {useState, useContext} from "react";
 import GithubContext from "../../context/github/GithubContext";
 
+
 const UserSearch = () => {
 
     const [text, setText] = useState("");
 
     // This context data is for the clear btn
-    const { users, fetchSearch } = useContext(GithubContext);
+    const { users, fetchSearch, clearUsers } = useContext(GithubContext);
 
 
     const handleChange = (e) => {
@@ -25,11 +26,15 @@ const UserSearch = () => {
         }
     }
 
+    const handleClear = () => {
+        clearUsers();
+    }
+
     const usersExist = () => {
         if (users.length > 0)
         return (
             <div>
-                <button className="btn btn-ghost btn-lg">
+                <button onClick={handleClear} className="btn btn-ghost btn-lg">
                     Clear
                 </button>
             </div>

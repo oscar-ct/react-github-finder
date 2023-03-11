@@ -5,7 +5,7 @@ function githubReducer (state, action) {
         case "GET_USERS":
             return {
                 // ...state,
-                state,
+                ...state,
                 users: action.payload,
                 isLoading: false,
             }
@@ -13,6 +13,12 @@ function githubReducer (state, action) {
             return {
                 ...state,
                 isLoading: true,
+            }
+        case "CLEAR_USERS":
+            return {
+                ...state,
+                users: [],
+                isLoading: false,
             }
         default:
             return state;
