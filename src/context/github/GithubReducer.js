@@ -26,6 +26,12 @@ function githubReducer (state, action) {
                 user: action.payload,
                 isLoading: false,
             }
+        case "GET_REPOS":
+            return {
+                ...state,
+                repos: action.payload,
+                isLoading: false,
+            }
         default:
             return state;
 
