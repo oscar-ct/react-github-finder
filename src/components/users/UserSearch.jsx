@@ -2,6 +2,7 @@ import React from 'react';
 import {useState, useContext} from "react";
 import GithubContext from "../../context/github/GithubContext";
 import AlertContext from "../../context/alert/AlertContext";
+import { fetchSearch } from "../../context/github/GithubActions";
 
 
 const UserSearch = () => {
@@ -9,7 +10,7 @@ const UserSearch = () => {
     const [text, setText] = useState("");
 
     // This context data is for the clear btn
-    const { users, fetchSearch, clearUsers } = useContext(GithubContext);
+    const { users, clearUsers, dispatch} = useContext(GithubContext);
 
     const { setAlert } = useContext(AlertContext);
 
@@ -17,14 +18,21 @@ const UserSearch = () => {
         setText(e.target.value)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (text === "") {
             // using AlertContext here
             setAlert("Please enter something", "error")
         } else {
-            fetchSearch(text);
+            dispatch({
+                type: "SET_LOADING"
+            });
+            const data = await fetchSearch(text);
             setText("");
+            dispatch({
+                type: "GET_USERS",
+                payload: data,
+            });
         }
     }
 
