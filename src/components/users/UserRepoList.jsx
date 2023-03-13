@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import UserRepoItem from "./UserRepoItem";
 
 
 const UserRepoList = ( {repos} ) => {
@@ -10,7 +11,7 @@ const UserRepoList = ( {repos} ) => {
                     Latest Repositories
                 </h2>
                 {repos.map(function (repo){
-                    return <h3>{repo.name}</h3>
+                    return <UserRepoItem key={repo.id} repo={repo}/>
                 })}
             </div>
         </div>
