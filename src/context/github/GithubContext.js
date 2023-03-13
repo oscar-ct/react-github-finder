@@ -22,19 +22,6 @@ export const GithubProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(githubReducer, initialState);
 
-    // SETS isLoading to false from githubReducer
-    const setIsLoading = () => {
-        dispatch({
-            type: "SET_LOADING"
-        });
-    }
-
-    const clearUsers = () => {
-        dispatch({
-            type: "CLEAR_USERS",
-        });
-
-    }
 
     // const fetchUsers = async () => {
     //     setIsLoading();
@@ -56,50 +43,35 @@ export const GithubProvider = ({ children }) => {
     // }
 
 
-
-
-    const fetchUser = async (login) => {
-        setIsLoading();
-        const response = await fetch(`${GITHUB_URL}/users/${login}`, {
-            headers: {
-                Authorization: `${GITHUB_TOKEN}`
-            }
+    const fetchUserAndRepos = async (login) => {
+        dispatch({
+            type: "SET_LOADING"
         });
-
-        if(response.status === 404) {
-            window.location = "/notfound";
-        } else {
-            const data = await response.json();
-            console.log(data);
-            dispatch({
-                type: "GET_USER",
-                payload: data,
-            });
-        }
-    }
-
-    const fetchUserRepos = async (login) => {
-        setIsLoading();
         const params = new URLSearchParams({
             sort: "created",
             per_page: 10,
         });
-        const response = await fetch(`${GITHUB_URL}/users/${login}/repos?${params}`, {
-            headers: {
-                Authorization: `${GITHUB_TOKEN}`
-            }
-        });
-
-        if (response.status === 404) {
+        const [repos, user] = await Promise.all([
+            fetch(`${GITHUB_URL}/users/${login}/repos?${params}`, {
+                headers: {
+                    Authorization: `${GITHUB_TOKEN}`
+                }
+            }),
+            fetch(`${GITHUB_URL}/users/${login}`, {
+                headers: {
+                    Authorization: `${GITHUB_TOKEN}`
+                }
+            })
+        ])
+        if (user.status === 404 || repos.status === 404) {
             window.location = "/notfound";
-        } else {
-            const data = await response.json();
-            console.log(data);
-            dispatch({
-                type: "GET_REPOS",
-                payload: data,
-            });
         }
+        const data = {user: await user.json(), repos: await repos.json()}
+        console.log(data)
+        dispatch({
+            type: "GET_USER_AND_REPOS",
+            payload: data,
+        });
     }
 
 
@@ -109,9 +81,7 @@ export const GithubProvider = ({ children }) => {
         user: state.user,
         repos: state.repos,
         dispatch,
-        clearUsers,
-        fetchUser,
-        fetchUserRepos,
+        fetchUserAndRepos,
     }}>
         {children}
     </GithubContext.Provider>

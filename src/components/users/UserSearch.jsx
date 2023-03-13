@@ -10,7 +10,7 @@ const UserSearch = () => {
     const [text, setText] = useState("");
 
     // This context data is for the clear btn
-    const { users, clearUsers, dispatch} = useContext(GithubContext);
+    const { users, dispatch} = useContext(GithubContext);
 
     const { setAlert } = useContext(AlertContext);
 
@@ -37,7 +37,9 @@ const UserSearch = () => {
     }
 
     const handleClear = () => {
-        clearUsers();
+        dispatch({
+            type: "CLEAR_USERS",
+        });
     }
 
     const usersExist = () => {

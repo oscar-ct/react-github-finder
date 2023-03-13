@@ -8,13 +8,12 @@ import UserRepoList from "../components/users/UserRepoList";
 
 const User = () => {
 
-    const { fetchUser, user, isLoading, fetchUserRepos, repos } = useContext(GithubContext);
+    const { user, isLoading, repos, fetchUserAndRepos } = useContext(GithubContext);
 
     const params = useParams();
 
     useEffect(function (){
-        fetchUser(params.login);
-        fetchUserRepos(params.login);
+        fetchUserAndRepos(params.login);
     }, [])
 
     if (isLoading) {
