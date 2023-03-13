@@ -3,16 +3,18 @@ import GithubContext from "../context/github/GithubContext";
 import {Link, useParams} from "react-router-dom";
 import {FaCodepen, FaStore, FaUserFriends, FaUsers} from "react-icons/fa";
 import Spinner from "../components/layout/Spinner";
+import UserRepoList from "../components/users/UserRepoList";
 
 
 const User = () => {
 
-    const { fetchUser, user, isLoading} = useContext(GithubContext);
+    const { fetchUser, user, isLoading, fetchUserRepos, repos } = useContext(GithubContext);
 
     const params = useParams();
 
     useEffect(function (){
         fetchUser(params.login);
+        fetchUserRepos(params.login);
     }, [])
 
     if (isLoading) {
@@ -20,6 +22,8 @@ const User = () => {
     }
 
     const {name, type, avatar_url, location, bio, twitter_username, login, html_url, followers, following, public_repos, public_gists, hireable, blog} = user;
+
+
 
     return (
         <>
@@ -149,8 +153,10 @@ const User = () => {
                             {public_gists}
                         </div>
                     </div>
-
                 </div>
+
+                <UserRepoList repos={repos}/>
+
             </div>
         </>
     );
